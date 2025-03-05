@@ -3,7 +3,7 @@ extends Area2D
 @export var speed = 200 #скорость ходьбы персонажа
 @export var runSpeed = 300 #скорость бега персонажа
 @export var max_ammo = 10 #Количество патронов в обойме
-@export var reload_time = 6.3 #скорость перезарядки пистолета
+@export var reload_time = 3.15 #скорость перезарядки пистолета
 
 var bullet = preload("res://scenes/bullet.tscn")
 
@@ -56,7 +56,7 @@ func update_ammo_display():
 func reload():
 	is_reloading = true
 	$ReloadPistol.play()
-	await get_tree().create_time(reload_time).timeout
+	await get_tree().create_timer(reload_time).timeout
 	current_ammo = max_ammo
 	is_reloading = false
 	update_ammo_display()
