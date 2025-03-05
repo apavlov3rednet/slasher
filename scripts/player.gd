@@ -55,21 +55,38 @@ func update_ammo_display():
 
 func reload():
 	is_reloading = true
-	await(get_tree().create_time(reload_time), "timeout")
-	
+	$ReloadPistol.play()
+	await get_tree().create_time(reload_time).timeout
+	current_ammo = max_ammo
+	is_reloading = false
+	update_ammo_display()
 
 #Логика стрельбы	
 func shoot():
-	#инстанцируем пулю
-	var bullet_instance = bullet.instantiate()
+	if is_reloading:
+		return
 	
-	#Начальная позиция пули
-	bullet_instance.position = playerPosition
-	
-	var mouse_position = get_global_mouse_position()
-	bullet_instance.direction = (mouse_position - playerPosition).normalized()
-	
-	#Добавляем пулю на сцену
-	get_parent().add_child(bullet_instance)
-	$PistolShoot.play()
+	if current_ammo > 0:
+		#инстанцируем пулю
+		var bullet_instance = bullet.instantiate()
+		
+		#Начальная позиция пули
+		bullet_instance.position = playerPosition
+		
+		var mouse_position = get_global_mouse_position()
+		bullet_instance.direction = (mouse_position - playerPosition).normalized()
+		
+		#Добавляем пулю на сцену
+		get_parent().add_child(bullet_instance)
+		$PistolShoot.play()
+		
+		current_ammo -= 1
+		update_ammo_display()
+		
+		#Проверить если пуль 0 то перезаряжаем
+		if current_ammo == 0:
+			reload()
+		
+	else:
+		print("Out of ammo")
 	
