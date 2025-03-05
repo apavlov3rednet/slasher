@@ -1,15 +1,23 @@
 extends Area2D
 
-@export var speed = 200
-@export var runSpeed = 300
+@export var speed = 200 #скорость ходьбы персонажа
+@export var runSpeed = 300 #скорость бега персонажа
+@export var max_ammo = 10 #Количество патронов в обойме
+@export var reload_time = 6.3 #скорость перезарядки пистолета
+
+var bullet = preload("res://scenes/bullet.tscn")
 
 var target_position = Vector2()
-var bullet = preload("res://scenes/bullet.tscn")
 var playerPosition = 0
+var current_ammo = max_ammo
+var is_reloading = false
+
+@onready var ammo_label = $Ammo
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	target_position = position
+	update_ammo_display()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -41,9 +49,17 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed('ui_select'):
 		shoot()
 
+#Обновляем текст с количеством патронов
+func update_ammo_display():
+	ammo_label.text = "Ammo: %d" % current_ammo
+
+func reload():
+	is_reloading = true
+	await(get_tree().create_time(reload_time), "timeout")
+	
+
 #Логика стрельбы	
 func shoot():
-	#print('Shoot!')
 	#инстанцируем пулю
 	var bullet_instance = bullet.instantiate()
 	
@@ -55,7 +71,5 @@ func shoot():
 	
 	#Добавляем пулю на сцену
 	get_parent().add_child(bullet_instance)
-	$AudioStreamPlayer.play()
-	
-	
+	$PistolShoot.play()
 	

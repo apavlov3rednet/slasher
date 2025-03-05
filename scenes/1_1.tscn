@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://rtwe6sv8ebvr"]
+[gd_scene load_steps=7 format=3 uid="uid://rtwe6sv8ebvr"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_pmpvf"]
 [ext_resource type="Texture2D" uid="uid://x5o7ar7icpcf" path="res://assets/sprites/player_default.png" id="2_v08tc"]
@@ -7,11 +7,21 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tfgs8"]
 size = Vector2(32, 30)
 
+[sub_resource type="SystemFont" id="SystemFont_1m078"]
+
+[sub_resource type="Theme" id="Theme_xpwxj"]
+default_font = SubResource("SystemFont_1m078")
+default_font_size = 12
+
 [node name="Node2D" type="Node2D"]
 
 [node name="Player" type="Area2D" parent="."]
 position = Vector2(215, 208)
 script = ExtResource("1_pmpvf")
+speed = null
+runSpeed = null
+max_ammo = null
+reload_time = null
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 scale = Vector2(0.0721154, 0.0721154)
@@ -20,5 +30,13 @@ texture = ExtResource("2_v08tc")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_tfgs8")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Player"]
+[node name="PistolShoot" type="AudioStreamPlayer" parent="Player"]
 stream = ExtResource("3_v6wit")
+
+[node name="Ammo" type="Label" parent="Player"]
+offset_left = -91.0
+offset_top = -21.0
+offset_right = -31.0
+offset_bottom = 18.0
+theme = SubResource("Theme_xpwxj")
+theme_override_colors/font_color = Color(0.776303, 0.549032, 0.280889, 1)
